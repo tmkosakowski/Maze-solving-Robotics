@@ -1,0 +1,134 @@
+//MAZE SOLVER
+#define LA 2
+#define LB 3
+#define RA 4
+#define RB 5
+#define ENA 6
+#define ENB 7
+#define TrigPinL 13
+#define EchoPinL 12
+#define TrigPinF 11
+#define EchoPinF 10
+void setup() {
+//Motor Driver Pin Mode Settings
+pinMode(LA, OUTPUT);
+pinMode(LB, OUTPUT);
+pinMode(RA, OUTPUT);
+pinMode(RB, OUTPUT);
+pinMode(ENA, OUTPUT);
+pinMode(ENB, OUTPUT);
+//Ultrasonic Pin Mode Settings
+pinMode(TrigPinL, OUTPUT);
+pinMode(EchoPinL, INPUT);
+pinMode(TrigPinF, OUTPUT);
+pinMode(EchoPinF, INPUT);
+analogWrite(ENA, 120);
+analogWrite(ENB, 120);
+Serial.begin(9600);
+}
+int distanceL, distanceF;
+void loop() {
+FindDistanceF();
+if (distanceF <= 10 && distanceF > 0) {
+Right();
+delay(150);
+} else {
+FindDistanceL();
+if (distanceL > 0 && distanceL <= 5) {
+Right();
+delay(10);
+Forward();
+delay(15);
+} else if (distanceL > 5 && distanceL <= 10) {
+Left();
+delay(10);
+Forward();
+delay(15);
+} else if (distanceL > 10 && distanceL <= 15) {
+Left();
+delay(15);
+Forward();
+delay(20);
+} else if (distanceL > 15 && distanceL <= 20) {
+Left();
+delay(25);
+Forward();
+delay(30);
+} else if (distanceL > 20 && distanceL <= 25) {
+Left();
+delay(30);
+Forward();
+delay(35);
+} else if (distanceL > 25 && distanceL <= 35) {
+Forward();
+delay(30);
+Left();
+delay(60);
+Forward();
+delay(60);
+} else if (distanceL > 35 && distanceL <= 45) {
+Forward();
+delay(30);
+Left();
+delay(40);
+Forward();
+delay(80);
+}else if (distanceL > 45) {
+Forward();
+delay(100);
+Left();
+delay(60);
+Forward();
+delay(30);
+}
+}
+Stop();
+}
+void Forward() {
+digitalWrite(LA, HIGH);
+digitalWrite(LB, LOW);
+digitalWrite(RA, HIGH);
+digitalWrite(RB, LOW);
+}
+void BackWard() {
+digitalWrite(LA, LOW);
+digitalWrite(LB, HIGH);
+digitalWrite(RA, LOW);
+digitalWrite(RB, HIGH);
+}
+void Right() {
+digitalWrite(LA, HIGH);
+digitalWrite(LB, LOW);
+digitalWrite(RA, LOW);
+digitalWrite(RB, HIGH);
+}
+void Left() {
+digitalWrite(LA, LOW);
+digitalWrite(LB, HIGH);
+digitalWrite(RA, HIGH);
+digitalWrite(RB, LOW);
+}
+void Stop() {
+digitalWrite(LA, LOW);
+digitalWrite(LB, LOW);
+digitalWrite(RA, LOW);
+digitalWrite(RB, LOW);
+}
+void FindDistanceL() {
+int duration;
+digitalWrite(TrigPinL, HIGH);
+delayMicroseconds(10);
+digitalWrite(TrigPinL, LOW);
+duration = pulseIn(EchoPinL, HIGH);
+distanceL = (duration / 2) * (1 / 29.1);
+//Serial.println(distanceL);
+}
+void FindDistanceF() {
+int duration;
+digitalWrite(TrigPinF, HIGH);
+delay(1);
+digitalWrite(TrigPinF, LOW);
+duration = pulseIn(EchoPinF, HIGH, 3000);
+distanceF = (duration / 2) * (1 / 29.1);
+//Serial.println(distanceF);
+}

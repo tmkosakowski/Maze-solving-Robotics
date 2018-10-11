@@ -1,2 +1,2 @@
 # Maze-solving-Robotics
-Maze solving algorythm for arduino robot
+Maze solving algorythm for arduino robot in micro-C
